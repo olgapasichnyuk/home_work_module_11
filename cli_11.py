@@ -11,16 +11,6 @@ class IncorrectFormatPhone(Exception):
 
 
 class Field:
-    pass
-
-
-class Name(Field):
-
-    def __init__(self, value: str):
-        self.value = value
-
-
-class Phone(Field):
     def __init__(self, value):
         self.__value = None
         self.value = value
@@ -31,26 +21,31 @@ class Phone(Field):
 
     @value.setter
     def value(self, value):
+        self.__value = value
+
+
+class Name(Field):
+    pass
+
+
+class Phone(Field):
+
+    @Field.value.setter
+    def value(self, value):
         if 10 <= len(value) <= 13 and value.isnumeric():
-            self.__value = value
+            self._Field__value = value
         else:
             raise IncorrectFormatPhone
 
 
+
 class Birthday(Field):
-    def __init__(self, value: str):
-        self.__value = None
-        self.value = value
 
-    @property
-    def value(self):
-        return self.__value
-
-    @value.setter
+    @Field.value.setter
     def value(self, value):
         try:
             if datetime.strptime(value, '%d-%m-%Y'):
-                self.__value = value
+                self._Field__value = value
         except ValueError:
             raise IncorrectFormatPhone
 
